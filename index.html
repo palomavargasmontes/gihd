@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo de Investigación en Humanidades Digitales</title>
+    <!-- Importamos PapaParse para leer el CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; max-width: 800px; }
+        .investigador-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        .investigador-card h2 { margin-top: 0; color: #2c3e50; }
+        .etiqueta { font-weight: bold; color: #34495e; }
+    </style>
+</head>
+<body>
+
+    <h1>Directorio del Grupo de Investigación</h1>
+    <p>Conoce a los miembros, sus líneas de trabajo y proyectos activos.</p>
+    
+    <div id="directorio-container"></div>
+
+    <script>
+        // Leemos el archivo CSV directamente
+        Papa.parse("GI Humanidades Digitales (Responses) - Form Responses 1.csv", {
+            download: true,
+            header: true, // Usa la primera fila como nombres de variables
+            complete: function(results) {
+                const container = document.getElementById("directorio-container");
+                
+                results.data.forEach(fila => {
+                    // Verificamos que la fila tenga un nombre para evitar filas vacías
+                    if(fila["Nombre"]) {
+                        const card = document.createElement("div");
+                        card.className = "investigador-card";
+                        
+                        card.innerHTML = `
+                            <h2>${fila["Nombre"]}</h2>
+                            <p><span class="etiqueta">Campus:</span> ${fila["Campus"]}</p>
+                            <p><span class="etiqueta">Línea de investigación:</span> ${fila["¿En cuál de las siguientes líneas ves mejor inserta tu investigación?"]}</p>
+                            <p><span class="etiqueta">Proyecto actual:</span> ${fila["Proyecto de investigación (actual)"]}</p>
+                            <p><span class="etiqueta">Semblanza:</span> ${fila["Semblanza (50 palabras)"]}</p>
+                        `;
+                        container.appendChild(card);
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
